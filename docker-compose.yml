@@ -12,3 +12,10 @@ services:
     image: ghcr.io/mcmastercce/bvd-103-mcmasterful-books/mcmasterful-books-docker:main
     volumes:
         - ./adapter:/source/adapter
+  
+  server:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: npx -y tsx ./index.ts
