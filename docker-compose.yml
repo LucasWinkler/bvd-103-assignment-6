@@ -19,3 +19,6 @@ services:
     volumes:
       - ./:/app
     command: npx -y tsx ./index.ts
+
+  mongo:
+    image: mongo:latest
