@@ -24,7 +24,16 @@ export const baseUrl = '/api'
 // Within a single filter, a book would need to match all the given conditions
 async function listBooks (filters?: Filter[]): Promise<Book[]> {
   // We then make the request
-  const result = await fetch(`${baseUrl}/books/list`, { body: JSON.stringify(filters ?? []), method: 'POST' })
+  const cleanedFilters = (filters ?? []).filter(f => !isEmptyFilter(f));
+  const isFiltered = cleanedFilters.length !== 0;
+  const result = await fetch(`${baseUrl}/books/list`, {
+    body: JSON.stringify(cleanedFilters),
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(isFiltered ? { 'X-Has-Filters': '1' } : {})
+    }
+  });
 
   if (result.ok) {
     // And if it is valid, we parse the JSON result and return it.
@@ -108,6 +117,12 @@ async function listOrders (): Promise<Array<{ orderId: OrderId, books: Record<Bo
   } else {
     throw new Error('Couldnt Find Book')
   }
+}
+
+function isEmptyFilter(filter: Filter): boolean {
+  return Object.values(filter).every(
+    v => v === undefined || v === null || (typeof v === "string" && v.trim() === "")
+  );
 }
 
 const assignment = 'assignment-4'
