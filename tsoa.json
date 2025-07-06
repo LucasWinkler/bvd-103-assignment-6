@@ -3,6 +3,7 @@
     "noImplicitAdditionalProperties": "throw-on-extras",
     "controllerPathGlobs": ["src/**/*.route.ts"],
     "spec": {
+        "basePath": "/api",
         "outputDirectory": "build",
         "specVersion": 3
     },
