@@ -18,7 +18,7 @@ export interface Filter {
   author?: string
 };
 
-export const baseUrl = 'http://localhost:3000/api'
+export const baseUrl = '/api'
 
 // If multiple filters are provided, any book that matches at least one of them should be returned
 // Within a single filter, a book would need to match all the given conditions
