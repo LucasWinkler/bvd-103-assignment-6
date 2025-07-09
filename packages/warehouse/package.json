@@ -1,14 +1,15 @@
 {
-  "name": "assignment-template",
+  "name": "@assignment/warehouse",
   "version": "1.0.0",
-  "description": "This is a template repository for the first assignment in BVD 103 at McMaster Continuing Education.",
+  "description": "Warehouse service",
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "start-server": "./generate-openapi.sh && tsx ./index.ts",
-    "lint": "./generate-openapi.sh && eslint ./**/*.ts",
-    "fix-lint": "./generate-openapi.sh && eslint --fix ./**/*.ts",
-    "check-types": "./generate-openapi.sh && tsc --noEmit",
+    "gen": "./generate-openapi.sh",
+    "start-server": "npm run gen && tsx ./index.ts",
+    "lint": "npm run gen && eslint ./**/*.ts",
+    "fix-lint": "npm run gen && eslint --fix ./**/*.ts",
+    "check-types": "npm run gen && tsc --noEmit",
     "test": "vitest",
     "test:ci": "vitest run"
   },
@@ -22,7 +23,6 @@
     "koa-bodyparser": "^4.4.1",
     "koa-qs": "^3.0.0",
     "koa-zod-router": "^2.2.0",
-    "koa2-swagger-ui": "^5.10.0",
     "mongodb": "^6.5.0",
     "tsoa": "^6.2.0",
     "uuid": "^9.0.1",
@@ -42,6 +42,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "mongodb-memory-server": "^9.1.8",
     "typescript": "^5.4.3",
+    "tsx": "^4.7.0",
     "vitest": "^1.4.0"
   }
 }
