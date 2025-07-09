@@ -4,13 +4,21 @@
   "description": "This is a template repository for the first assignment in BVD 103 at McMaster Continuing Education.",
   "main": "index.ts",
   "type": "module",
+  "workspaces": [
+    "warehouse",
+    "orders",
+    "books"
+  ],
   "scripts": {
     "start-server": "./generate-openapi.sh && tsx ./index.ts",
     "lint": "./generate-openapi.sh && eslint ./**/*.ts",
     "fix-lint": "./generate-openapi.sh && eslint --fix ./**/*.ts",
     "check-types": "./generate-openapi.sh && tsc --noEmit",
     "test": "vitest",
-    "test:ci": "vitest run"
+    "test:ci": "vitest run",
+    "generate:openapi:all": "npm --workspace warehouse run gen && npm --workspace orders run gen && npm --workspace books run gen && npm run generate:swagger",
+    "generate:swagger": "npx swagger-cli bundle warehouse/build/swagger.json orders/build/swagger.json books/build/swagger.json --outfile docs/build/swagger.json --type json"
+
   },
   "keywords": [],
   "author": "",
