@@ -5,13 +5,10 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "gen": "./generate-openapi.sh",
-    "start-server": "npm run gen && tsx ./index.ts",
-    "lint": "npm run gen && eslint ./**/*.ts",
-    "fix-lint": "npm run gen && eslint --fix ./**/*.ts",
-    "check-types": "npm run gen && tsc --noEmit",
-    "test": "vitest",
-    "test:ci": "vitest run"
+    "start-server": "tsx ./index.ts",
+    "lint": "eslint ./**/*.ts",
+    "fix-lint": "eslint --fix ./**/*.ts",
+    "check-types": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
