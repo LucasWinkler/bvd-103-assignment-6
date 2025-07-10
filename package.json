@@ -10,9 +10,10 @@
     "packages/docs"
   ],
   "scripts": {
-    "generate:openapi:all": "npm --workspace packages/warehouse run gen && npm --workspace packages/orders run gen && npm --workspace packages/books run gen && npm run generate:swagger",
+    "gen": "npm run --workspaces gen",
     "generate:swagger": "npx swagger-cli bundle packages/warehouse/build/swagger.json packages/orders/build/swagger.json packages/books/build/swagger.json --outfile packages/docs/build/swagger.json --type json",
-    "start:all": "npm --workspace packages/warehouse run start-server & npm --workspace packages/orders run start-server & npm --workspace packages/books run start-server & npm --workspace packages/docs run start-server",
+    "build": "npm run gen && npm run generate:swagger",
+    "start-server": "npm run --workspaces start-server",
     "lint": "npm run --workspaces lint",
     "test": "npm run --workspaces test"
   },
