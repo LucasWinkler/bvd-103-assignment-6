@@ -10,7 +10,7 @@
     "packages/docs"
   ],
   "scripts": {
-    "gen": "npm run --workspaces gen",
+    "gen": "npm run --workspaces --if-present gen",
     "generate:swagger": "npx swagger-cli bundle packages/warehouse/build/swagger.json packages/orders/build/swagger.json packages/books/build/swagger.json --outfile packages/docs/build/swagger.json --type json",
     "build": "npm run gen && npm run generate:swagger",
     "start-server": "npm run --workspaces start-server",
