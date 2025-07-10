@@ -2,35 +2,56 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - "8080:80"
+      - '8080:80'
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - nginx_cache:/var/lib/nginx/cache
     depends_on:
       - front-end
-      - server
-      - server-2
-      - server-3
+      - books-service
+      - orders-service
+      - warehouse-service
 
   front-end:
     image: ghcr.io/mcmastercce/bvd-103-mcmasterful-books/mcmasterful-books-docker:main
     volumes:
       - ./adapter:/source/adapter
 
-  server: &server-base
+  books-service:
     image: node:20
-    working_dir: /app
     volumes:
-      - ./:/app
-    command: npx -y tsx ./index.ts
+      - ./packages/books:/app
+    command: npm run start-server
+    working_dir: /app
     depends_on:
       - mongo
 
-  server-2:
-    <<: *server-base
+  orders-service:
+    image: node:20
+    volumes:
+      - ./packages/orders:/app
+    command: npm run start-server
+    working_dir: /app
+    depends_on:
+      - mongo
 
-  server-3:
-    <<: *server-base
+  warehouse-service:
+    image: node:20
+    volumes:
+      - ./packages/warehouse:/app
+    command: npm run start-server
+    working_dir: /app
+    depends_on:
+      - mongo
+
+  docs-service:
+    image: node:20
+    volumes:
+      - ./packages/docs:/app
+    command: npm run start-server
+    working_dir: /app
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo:latest
