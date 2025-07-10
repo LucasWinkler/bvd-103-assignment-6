@@ -24,7 +24,7 @@ export default async function (
   )
   return {
     server: app.listen(port, () => {
-      console.log('listening')
+      console.log('Docs service listening')
     })
   }
 }

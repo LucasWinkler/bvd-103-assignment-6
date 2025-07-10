@@ -57,7 +57,7 @@ export default async function (port?: number, randomizeDbs?: boolean): Promise<{
   }))
   return {
     server: app.listen(port, () => {
-      console.log('listening')
+      console.log('Books service listening')
     }),
     state
   }
