@@ -1,7 +1,7 @@
 import { type BookID, type OrderId } from '../../adapter/assignment-4'
-import { InMemoryWarehouse, type WarehouseData } from './warehouse_data'
+import { InMemoryOrders, type OrdersData } from './orders_data'
 
-export async function placeOrder (data: WarehouseData, books: BookID[]): Promise<OrderId> {
+export async function placeOrder (data: OrdersData, books: BookID[]): Promise<OrderId> {
   const order: Record<BookID, number> = {}
 
   for (const book of books) {
@@ -15,7 +15,7 @@ if (import.meta.vitest !== undefined) {
   const { test, expect } = import.meta.vitest
 
   test('can place an order for a single book', async () => {
-    const data = new InMemoryWarehouse()
+    const data = new InMemoryOrders()
 
     const orderId = await placeOrder(data, ['my_book'])
 
@@ -30,7 +30,7 @@ if (import.meta.vitest !== undefined) {
   })
 
   test('can place an order for multiple books', async () => {
-    const data = new InMemoryWarehouse()
+    const data = new InMemoryOrders()
 
     const orderId = await placeOrder(data, ['my_book', 'my_second_book'])
 
@@ -47,7 +47,7 @@ if (import.meta.vitest !== undefined) {
   })
 
   test('can place an order for multiple copies of a book', async () => {
-    const data = new InMemoryWarehouse()
+    const data = new InMemoryOrders()
 
     const orderId = await placeOrder(data, ['my_book', 'my_book', 'my_book'])
 
