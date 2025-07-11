@@ -1,6 +1,6 @@
 import { ObjectId, type Collection, type Db } from 'mongodb'
 import { type BookID, type OrderId } from '../documented_types'
-import { client } from '../database_access'
+import { client } from './database_access'
 import { type OrdersData, InMemoryOrders } from './orders_data'
 
 export interface OrdersDatabaseAccessor {

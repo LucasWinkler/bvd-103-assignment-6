@@ -3,7 +3,7 @@ import {
   type BookID,
   type OrderId
 } from './src/documented_types'
-import { type OrdersDatabaseAccessor } from './src/order/orders_database'
+import { type OrdersDatabaseAccessor } from './src/data/orders_database'
 
 export async function seedOrdersDatabase (
   accessor: OrdersDatabaseAccessor,

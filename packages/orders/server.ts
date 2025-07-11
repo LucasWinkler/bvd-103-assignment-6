@@ -11,11 +11,11 @@ import { type Server, type IncomingMessage, type ServerResponse } from 'http'
 import {
   type AppBookDatabaseState,
   getBookDatabase
-} from './src/database_access'
+} from './src/data/database_access'
 import {
   type AppWarehouseDatabaseState,
   getDefaultOrdersDatabase
-} from './src/order/orders_database'
+} from './src/data/orders_database'
 
 export default async function (
   port?: number,

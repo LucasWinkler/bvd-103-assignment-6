@@ -1,13 +1,13 @@
 import { BodyProp, Controller, Get, Path, Post, Put, Route, SuccessResponse, Request } from 'tsoa'
 import { type OrderId, type FulfilledBooks, type OrderPlacement, type Order } from '../documented_types'
-import { fulfilOrder } from './fulfil_order'
-import { placeOrder } from './place_order'
-import { listOrders } from './list_orders'
+import { fulfilOrder } from '../data/fulfil_order'
+import { placeOrder } from '../data/place_order'
+import { listOrders } from '../data/list_orders'
 import { type ParameterizedContext, type DefaultContext, type Request as KoaRequest } from 'koa'
-import { type AppWarehouseDatabaseState } from './orders_database'
+import { type AppWarehouseDatabaseState } from '../data/orders_database'
 
-@Route('fulfil')
-export class FulfilOrderRoutes extends Controller {
+@Route('order')
+export class OrderRoutes extends Controller {
   /**
      * Fulfil an order by taking all the relevant book copies for the order off the shelves
      * @param order The Order ID
@@ -30,10 +30,7 @@ export class FulfilOrderRoutes extends Controller {
       console.error('Error Fulfilling Order', e)
     }
   }
-}
 
-@Route('order')
-export class OrderRoutes extends Controller {
   /**
      * Place an order
      * @param order An array of the ordered book id's
