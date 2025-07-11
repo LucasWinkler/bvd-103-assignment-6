@@ -30,6 +30,6 @@
     "resolveJsonModule": true,
     "types": [
       "vitest/importMeta"
-    ],
+    ]
   }
 }

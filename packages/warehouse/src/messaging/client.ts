@@ -1,4 +1,7 @@
 import { type Channel, type ChannelModel, connect } from 'amqplib'
+import { handleFulfilOrderEvent } from './fulfil_order'
+import { type WarehouseData } from '../data/warehouse_data'
+import { type OrderFulfilledEvent } from './events'
 
 let connection: ChannelModel | null = null
 let channel: Channel | null = null
@@ -21,6 +24,7 @@ export async function connectToMessagingClient (): Promise<void> {
       switch (event.type) {
         case 'OrderFulfilled':
           console.log(`Order fulfilled: ${event}`)
+          handleFulfilOrderEvent(event.data as WarehouseData, event as OrderFulfilledEvent).catch(console.error)
           break
         default:
           console.log(`Unhandled event type: ${event.type}`)
