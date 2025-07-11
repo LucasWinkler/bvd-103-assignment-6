@@ -1,4 +1,4 @@
-import { type BookID, type OrderId } from '../../adapter/assignment-4'
+import { type BookID, type OrderId } from '../documented_types'
 import { InMemoryOrders, type OrdersData } from './orders_data'
 
 export async function listOrders (data: OrdersData): Promise<Array<{ orderId: OrderId, books: Record<BookID, number> }>> {

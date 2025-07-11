@@ -2,7 +2,6 @@ import Koa from 'koa'
 import cors from '@koa/cors'
 import qs from 'koa-qs'
 import zodRouter from 'koa-zod-router'
-import { setupBookRoutes } from './src/books'
 import { RegisterRoutes } from './build/routes'
 import swagger from './build/swagger.json'
 import KoaRouter from '@koa/router'
@@ -15,8 +14,8 @@ import {
 } from './src/database_access'
 import {
   type AppWarehouseDatabaseState,
-  getDefaultWarehouseDatabase
-} from './src/order/warehouse_database'
+  getDefaultOrdersDatabase
+} from './src/order/orders_database'
 
 export default async function (
   port?: number,
@@ -28,13 +27,13 @@ export default async function (
   const bookDb = getBookDatabase(
     randomizeDbs === true ? undefined : 'mcmasterful-books'
   )
-  const warehouseDb = await getDefaultWarehouseDatabase(
+  const warehouseDb = await getDefaultOrdersDatabase(
     randomizeDbs === true ? undefined : 'mcmasterful-warehouse'
   )
 
   const state: AppBookDatabaseState & AppWarehouseDatabaseState = {
     books: bookDb,
-    warehouse: warehouseDb
+    orders: warehouseDb
   }
 
   const app = new Koa<
@@ -54,8 +53,6 @@ export default async function (
   app.use(cors())
 
   const router = zodRouter({ zodRouter: { exposeRequestErrors: true } })
-
-  setupBookRoutes(router, state.books)
 
   app.use(bodyParser())
   app.use(router.routes())
