@@ -1,5 +1,6 @@
 import { type ShelfId, type BookID, type OrderId } from '../documented_types'
 import { InMemoryOrders, type OrdersData } from '../data/orders_data'
+import { publishOrderFulfilled } from '../messaging/broker'
 
 export async function fulfilOrder (data: OrdersData, orderId: OrderId, booksFulfilled: Array<{ book: BookID, shelf: ShelfId, numberOfBooks: number }>): Promise<void> {
   const order = await data.getOrder(orderId)
@@ -21,21 +22,14 @@ export async function fulfilOrder (data: OrdersData, orderId: OrderId, booksFulf
     }
   }
 
-  // TODO: Replace with messaging or something?
   const processedFulfilment = await Promise.all(booksFulfilled.map(async ({ book, shelf, numberOfBooks }) => {
-    const currentCopiesOnShelf = await data.getCopiesOnShelf(book, shelf)
-    const newCopiesOnShelf = currentCopiesOnShelf - numberOfBooks
-    if (newCopiesOnShelf < 0) {
-      throw new Error('not enough copies on given shelves')
-    }
-    return { book, shelf, numberOfBooks: newCopiesOnShelf }
+    await publishOrderFulfilled({ book, shelf, numberOfBooks })
   }))
 
   await data.removeOrder(orderId)
-  await Promise.all(processedFulfilment.map(async ({ book, shelf, numberOfBooks }) => {
-    await data.placeBookOnShelf(book, shelf, numberOfBooks)
-  }))
+  await Promise.all(processedFulfilment)
 }
+
 if (import.meta.vitest !== undefined) {
   const { test, expect } = import.meta.vitest
 

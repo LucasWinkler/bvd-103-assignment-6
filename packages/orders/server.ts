@@ -10,6 +10,7 @@ import {
   type AppWarehouseDatabaseState,
   getDefaultOrdersDatabase
 } from './src/data/orders_database'
+import { closeBroker, connectToBroker } from './src/messaging/broker'
 
 export default async function (
   port?: number,
@@ -21,6 +22,8 @@ export default async function (
   const warehouseDb = await getDefaultOrdersDatabase(
     randomizeDbs === true ? undefined : 'mcmasterful-warehouse'
   )
+
+  await connectToBroker()
 
   const state: AppWarehouseDatabaseState = {
     orders: warehouseDb
@@ -53,10 +56,32 @@ export default async function (
 
   app.use(koaRouter.routes())
 
+  const server = app.listen(port, () => {
+    console.log('Orders service listening')
+  })
+
+  process.on('SIGINT', () => {
+    void (async () => {
+      console.log('Shutting down Orders service...')
+      await closeBroker()
+      server.close(() => {
+        process.exit(0)
+      })
+    })()
+  })
+
+  process.on('SIGTERM', () => {
+    void (async () => {
+      console.log('Shutting down Orders service...')
+      await closeBroker()
+      server.close(() => {
+        process.exit(0)
+      })
+    })()
+  })
+
   return {
-    server: app.listen(port, () => {
-      console.log('Orders service listening')
-    }),
+    server,
     state
   }
 }

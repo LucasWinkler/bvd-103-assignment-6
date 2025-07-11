@@ -1,5 +1,6 @@
 import { type Channel, type ChannelModel, connect } from 'amqplib'
-import { type Book, type BookID, type BookDeletedEvent, type BookUpdatedEvent, type BookAddedEvent } from '../documented_types'
+import { type Book, type BookID } from '../documented_types'
+import { type BookAddedEvent, type BookDeletedEvent, type BookUpdatedEvent } from './events'
 
 let connection: ChannelModel | null = null
 let channel: Channel | null = null
