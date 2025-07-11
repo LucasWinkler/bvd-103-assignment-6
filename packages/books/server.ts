@@ -8,10 +8,12 @@ import KoaRouter from '@koa/router'
 import bodyParser from 'koa-bodyparser'
 import { type Server, type IncomingMessage, type ServerResponse } from 'http'
 import { type AppBookDatabaseState, getBookDatabase } from './src/data/database_access'
-import { closeBroker } from './src/messaging/broker'
+import { closeBroker, connectToBroker } from './src/messaging/broker'
 
 export default async function (port?: number, randomizeDbs?: boolean): Promise<{ server: Server<typeof IncomingMessage, typeof ServerResponse>, state: AppBookDatabaseState }> {
   const bookDb = getBookDatabase(randomizeDbs === true ? undefined : 'mcmasterful-books')
+
+  await connectToBroker()
 
   const state: AppBookDatabaseState = {
     books: bookDb
