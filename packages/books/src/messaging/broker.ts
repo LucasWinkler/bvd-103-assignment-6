@@ -1,5 +1,5 @@
 import { type Channel, type ChannelModel, connect } from 'amqplib'
-import { type BookEvent, type Book } from '../documented_types'
+import { type Book, type BookID, type BookDeletedEvent, type BookUpdatedEvent, type BookAddedEvent } from '../documented_types'
 
 let connection: ChannelModel | null = null
 let channel: Channel | null = null
@@ -21,7 +21,7 @@ export async function connectToBroker (): Promise<void> {
 export async function publishBookAdded (book: Book): Promise<void> {
   if (channel === null) throw new Error('Not connected to books broker')
 
-  const event: BookEvent = {
+  const event: BookAddedEvent = {
     type: 'BookAdded',
     timestamp: new Date(),
     data: book
@@ -34,7 +34,7 @@ export async function publishBookAdded (book: Book): Promise<void> {
 export async function publishBookUpdated (book: Book): Promise<void> {
   if (channel === null) throw new Error('Not connected to books broker')
 
-  const event: BookEvent = {
+  const event: BookUpdatedEvent = {
     type: 'BookUpdated',
     timestamp: new Date(),
     data: book
@@ -44,13 +44,13 @@ export async function publishBookUpdated (book: Book): Promise<void> {
   console.log('Published BookUpdated event')
 }
 
-export async function publishBookDeleted (book: Book): Promise<void> {
+export async function publishBookDeleted (bookId: BookID): Promise<void> {
   if (channel === null) throw new Error('Not connected to books broker')
 
-  const event: BookEvent = {
+  const event: BookDeletedEvent = {
     type: 'BookDeleted',
     timestamp: new Date(),
-    data: book
+    data: bookId
   }
 
   channel.publish(CHANNEL_NAME, 'book.deleted', Buffer.from(JSON.stringify(event)))

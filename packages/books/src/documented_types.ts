@@ -53,8 +53,25 @@ export interface Filter {
   author?: string
 };
 
-export interface BookEvent {
-  type: 'BookAdded' | 'BookUpdated' | 'BookDeleted'
+export interface BookAddedEvent {
+  type: 'BookAdded'
   timestamp: Date
   data: Book
 }
+
+export interface BookUpdatedEvent {
+  type: 'BookUpdated'
+  timestamp: Date
+  data: Book
+}
+
+export interface BookDeletedEvent {
+  type: 'BookDeleted'
+  timestamp: Date
+  data: BookID
+}
+
+export type BookEvent =
+  | BookAddedEvent
+  | BookUpdatedEvent
+  | BookDeletedEvent
