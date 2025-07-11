@@ -7,9 +7,12 @@ import KoaRouter from '@koa/router'
 import bodyParser from 'koa-bodyparser'
 import { type Server, type IncomingMessage, type ServerResponse } from 'http'
 import { type AppWarehouseDatabaseState, getDefaultWarehouseDatabase } from './src/data/warehouse_database'
+import { closeMessagingClient, connectToMessagingClient } from './src/messaging/client'
 
 export default async function (port?: number, randomizeDbs?: boolean): Promise<{ server: Server<typeof IncomingMessage, typeof ServerResponse>, state: AppWarehouseDatabaseState }> {
   const warehouseDb = await getDefaultWarehouseDatabase(randomizeDbs === true ? undefined : 'mcmasterful-warehouse')
+
+  await connectToMessagingClient()
 
   const state: AppWarehouseDatabaseState = {
     warehouse: warehouseDb
@@ -39,10 +42,32 @@ export default async function (port?: number, randomizeDbs?: boolean): Promise<{
 
   app.use(koaRouter.routes())
 
+  const server = app.listen(port, () => {
+    console.log('Warehouse service listening')
+  })
+
+  process.on('SIGINT', () => {
+    void (async () => {
+      console.log('Shutting down Warehouse service...')
+      await closeMessagingClient()
+      server.close(() => {
+        process.exit(0)
+      })
+    })()
+  })
+
+  process.on('SIGTERM', () => {
+    void (async () => {
+      console.log('Shutting down Warehouse service...')
+      await closeMessagingClient()
+      server.close(() => {
+        process.exit(0)
+      })
+    })()
+  })
+
   return {
-    server: app.listen(port, () => {
-      console.log('Warehouse service listening')
-    }),
+    server,
     state
   }
 }

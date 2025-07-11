@@ -1,6 +1,6 @@
 import { type ShelfId, type BookID, type OrderId } from '../documented_types'
 import { InMemoryOrders, type OrdersData } from '../data/orders_data'
-import { publishOrderFulfilled } from '../messaging/broker'
+import { publishOrderFulfilled } from '../messaging/client'
 
 export async function fulfilOrder (data: OrdersData, orderId: OrderId, booksFulfilled: Array<{ book: BookID, shelf: ShelfId, numberOfBooks: number }>): Promise<void> {
   const order = await data.getOrder(orderId)

@@ -10,7 +10,7 @@ import {
   type AppWarehouseDatabaseState,
   getDefaultOrdersDatabase
 } from './src/data/orders_database'
-import { closeBroker, connectToBroker } from './src/messaging/broker'
+import { closeMessagingClient, connectToMessagingClient } from './src/messaging/client'
 
 export default async function (
   port?: number,
@@ -23,7 +23,7 @@ export default async function (
     randomizeDbs === true ? undefined : 'mcmasterful-warehouse'
   )
 
-  await connectToBroker()
+  await connectToMessagingClient()
 
   const state: AppWarehouseDatabaseState = {
     orders: warehouseDb
@@ -63,7 +63,7 @@ export default async function (
   process.on('SIGINT', () => {
     void (async () => {
       console.log('Shutting down Orders service...')
-      await closeBroker()
+      await closeMessagingClient()
       server.close(() => {
         process.exit(0)
       })
@@ -73,7 +73,7 @@ export default async function (
   process.on('SIGTERM', () => {
     void (async () => {
       console.log('Shutting down Orders service...')
-      await closeBroker()
+      await closeMessagingClient()
       server.close(() => {
         process.exit(0)
       })

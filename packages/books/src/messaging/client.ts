@@ -7,7 +7,7 @@ let channel: Channel | null = null
 
 const CHANNEL_NAME = 'events'
 
-export async function connectToBroker (): Promise<void> {
+export async function connectToMessagingClient (): Promise<void> {
   if (connection !== null && channel !== null) {
     return
   }
@@ -58,7 +58,7 @@ export async function publishBookDeleted (bookId: BookID): Promise<void> {
   console.log('Published BookDeleted event')
 }
 
-export async function closeBroker (): Promise<void> {
+export async function closeMessagingClient (): Promise<void> {
   if (channel !== null) {
     await channel.close()
     channel = null

@@ -8,12 +8,12 @@ import KoaRouter from '@koa/router'
 import bodyParser from 'koa-bodyparser'
 import { type Server, type IncomingMessage, type ServerResponse } from 'http'
 import { type AppBookDatabaseState, getBookDatabase } from './src/data/database_access'
-import { closeBroker, connectToBroker } from './src/messaging/broker'
+import { closeMessagingClient, connectToMessagingClient } from './src/messaging/client'
 
 export default async function (port?: number, randomizeDbs?: boolean): Promise<{ server: Server<typeof IncomingMessage, typeof ServerResponse>, state: AppBookDatabaseState }> {
   const bookDb = getBookDatabase(randomizeDbs === true ? undefined : 'mcmasterful-books')
 
-  await connectToBroker()
+  await connectToMessagingClient()
 
   const state: AppBookDatabaseState = {
     books: bookDb
@@ -52,7 +52,7 @@ export default async function (port?: number, randomizeDbs?: boolean): Promise<{
   process.on('SIGINT', () => {
     void (async () => {
       console.log('Shutting down Books service...')
-      await closeBroker()
+      await closeMessagingClient()
       server.close(() => {
         process.exit(0)
       })
@@ -62,7 +62,7 @@ export default async function (port?: number, randomizeDbs?: boolean): Promise<{
   process.on('SIGTERM', () => {
     void (async () => {
       console.log('Shutting down Books service...')
-      await closeBroker()
+      await closeMessagingClient()
       server.close(() => {
         process.exit(0)
       })

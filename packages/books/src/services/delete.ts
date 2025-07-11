@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { type ZodRouter } from 'koa-zod-router'
 import { ObjectId } from 'mongodb'
 import { type BookDatabaseAccessor } from '../data/database_access'
-import { publishBookDeleted } from '../messaging/broker'
+import { publishBookDeleted } from '../messaging/client'
 
 export default function deleteBook (router: ZodRouter, books: BookDatabaseAccessor): void {
   router.register({
