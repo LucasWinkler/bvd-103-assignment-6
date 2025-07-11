@@ -1,8 +1,8 @@
 import { BodyProp, Controller, Get, Path, Post, Put, Route, SuccessResponse, Request } from 'tsoa'
 import { type OrderId, type FulfilledBooks, type OrderPlacement, type Order } from '../documented_types'
-import { fulfilOrder } from '../data/fulfil_order'
-import { placeOrder } from '../data/place_order'
-import { listOrders } from '../data/list_orders'
+import { fulfilOrder } from '../services/fulfil_order'
+import { placeOrder } from '../services/place_order'
+import { listOrders } from '../services/list_orders'
 import { type ParameterizedContext, type DefaultContext, type Request as KoaRequest } from 'koa'
 import { type AppWarehouseDatabaseState } from '../data/orders_database'
 

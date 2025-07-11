@@ -1,5 +1,5 @@
 import { type BookID, type OrderId } from '../documented_types'
-import { InMemoryOrders, type OrdersData } from './orders_data'
+import { InMemoryOrders, type OrdersData } from '../data/orders_data'
 
 export async function placeOrder (data: OrdersData, books: BookID[]): Promise<OrderId> {
   const order: Record<BookID, number> = {}
