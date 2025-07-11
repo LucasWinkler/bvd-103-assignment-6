@@ -1,16 +1,10 @@
-import { ObjectId } from 'mongodb'
-import { type BookID } from '../../adapter/assignment-2'
-import { type OrderId, type ShelfId } from '../../adapter/assignment-4'
+import { type OrderId, type ShelfId, type BookID } from '../documented_types'
 import { getDefaultWarehouseDatabase } from './warehouse_database'
 
 export interface WarehouseData {
   placeBookOnShelf: (bookId: BookID, shelf: ShelfId, count: number) => Promise<void>
   getCopiesOnShelf: (bookId: BookID, shelf: ShelfId) => Promise<number>
   getCopies: (bookId: BookID) => Promise<Record<ShelfId, number>>
-  getOrder: (order: OrderId) => Promise<Record<BookID, number> | false>
-  placeOrder: (books: Record<BookID, number>) => Promise<OrderId>
-  listOrders: () => Promise<Array<{ orderId: OrderId, books: Record<BookID, number> }>>
-  removeOrder: (order: OrderId) => Promise<void>
 }
 
 export class InMemoryWarehouse implements WarehouseData {
@@ -36,35 +30,6 @@ export class InMemoryWarehouse implements WarehouseData {
   async getCopies (bookId: string): Promise<Record<ShelfId, number>> {
     const book = this.books[bookId] ?? {}
     return book
-  }
-
-  async getOrder (order: OrderId): Promise<Record<BookID, number> | false> {
-    return order in this.orders ? this.orders[order] : false
-  }
-
-  async removeOrder (order: OrderId): Promise<void> {
-    const orders: Record<string, Record<BookID, number>> = {}
-
-    for (const orderId of Object.keys(this.orders)) {
-      if (orderId !== order) {
-        orders[orderId] = this.orders[orderId]
-      }
-    }
-
-    this.orders = orders
-  }
-
-  async listOrders (): Promise<Array<{ orderId: OrderId, books: Record<BookID, number> }>> {
-    return Object.keys(this.orders).map((orderId) => {
-      const books = this.orders[orderId]
-      return { orderId, books }
-    })
-  }
-
-  async placeOrder (books: Record<string, number>): Promise<OrderId> {
-    const order = new ObjectId().toHexString()
-    this.orders[order] = books
-    return order
   }
 }
 
