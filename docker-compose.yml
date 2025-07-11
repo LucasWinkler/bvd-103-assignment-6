@@ -24,7 +24,8 @@ services:
     command: npm run start-server
     working_dir: /app
     depends_on:
-      - mongo
+      - mongo-books
+      - rabbitmq
 
   orders-service:
     image: node:20
@@ -33,7 +34,8 @@ services:
     command: npm run start-server
     working_dir: /app
     depends_on:
-      - mongo
+      - mongo-orders
+      - rabbitmq
 
   warehouse-service:
     image: node:20
@@ -42,7 +44,8 @@ services:
     command: npm run start-server
     working_dir: /app
     depends_on:
-      - mongo
+      - mongo-warehouse
+      - rabbitmq
 
   docs-service:
     image: node:20
@@ -50,10 +53,12 @@ services:
       - ./packages/docs:/app
     command: npm run start-server
     working_dir: /app
-    depends_on:
-      - mongo
 
-  mongo:
+  mongo-books:
+    image: mongo:latest
+  mongo-orders:
+    image: mongo:latest
+  mongo-warehouse:
     image: mongo:latest
 
   rabbitmq:
