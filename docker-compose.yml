@@ -56,5 +56,8 @@ services:
   mongo:
     image: mongo:latest
 
+  rabbitmq:
+    image: rabbitmq:3-management
+
 volumes:
   nginx_cache:
