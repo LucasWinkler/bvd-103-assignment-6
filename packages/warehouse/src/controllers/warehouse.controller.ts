@@ -1,9 +1,9 @@
 import { Controller, Get, Path, Put, Route, SuccessResponse, Request } from 'tsoa'
-import { getBookInfo } from './get_book_info'
+import { getBookInfo } from '../services/get_book_info'
 import { type ShelfId, type BookID } from '../documented_types'
-import { placeBooksOnShelf } from './place_on_shelf'
+import { placeBooksOnShelf } from '../services/place_on_shelf'
 import { type ParameterizedContext, type DefaultContext, type Request as KoaRequest } from 'koa'
-import { type AppWarehouseDatabaseState } from './warehouse_database'
+import { type AppWarehouseDatabaseState } from '../data/warehouse_database'
 
 @Route('warehouse')
 export class WarehouseRoutes extends Controller {

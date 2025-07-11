@@ -1,5 +1,5 @@
 import { type ShelfId, type BookID } from '../documented_types'
-import { InMemoryWarehouse, type WarehouseData } from './warehouse_data'
+import { InMemoryWarehouse, type WarehouseData } from '../data/warehouse_data'
 
 export async function getBookInfo (data: WarehouseData, bookId: BookID): Promise<Record<ShelfId, number>> {
   const copies = await data.getCopies(bookId)

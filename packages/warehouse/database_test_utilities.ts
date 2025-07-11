@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import { type ShelfId, type BookID, type OrderId } from './src/documented_types'
-import { type WarehouseDatabaseAccessor } from './src/warehouse/warehouse_database'
+import { type WarehouseDatabaseAccessor } from './src/data/warehouse_database'
 
 export async function seedWarehouseDatabase (accessor: WarehouseDatabaseAccessor, { books, orders }: { books: Record<BookID, Record<ShelfId, number>>, orders: Record<OrderId, Record<BookID, number>> }): Promise<void> {
   await Promise.all([

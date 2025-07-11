@@ -3,15 +3,9 @@ import cors from '@koa/cors'
 import qs from 'koa-qs'
 import zodRouter from 'koa-zod-router'
 import { RegisterRoutes } from './build/routes'
-import swagger from './build/swagger.json'
 import KoaRouter from '@koa/router'
-import { koaSwagger } from 'koa2-swagger-ui'
 import bodyParser from 'koa-bodyparser'
 import { type Server, type IncomingMessage, type ServerResponse } from 'http'
-import {
-  type AppBookDatabaseState,
-  getBookDatabase
-} from './src/data/database_access'
 import {
   type AppWarehouseDatabaseState,
   getDefaultOrdersDatabase
@@ -22,22 +16,18 @@ export default async function (
   randomizeDbs?: boolean
 ): Promise<{
     server: Server<typeof IncomingMessage, typeof ServerResponse>
-    state: AppBookDatabaseState & AppWarehouseDatabaseState
+    state: AppWarehouseDatabaseState
   }> {
-  const bookDb = getBookDatabase(
-    randomizeDbs === true ? undefined : 'mcmasterful-books'
-  )
   const warehouseDb = await getDefaultOrdersDatabase(
     randomizeDbs === true ? undefined : 'mcmasterful-warehouse'
   )
 
-  const state: AppBookDatabaseState & AppWarehouseDatabaseState = {
-    books: bookDb,
+  const state: AppWarehouseDatabaseState = {
     orders: warehouseDb
   }
 
   const app = new Koa<
-  AppBookDatabaseState & AppWarehouseDatabaseState,
+  AppWarehouseDatabaseState,
   Koa.DefaultContext
   >()
 
@@ -62,16 +52,7 @@ export default async function (
   RegisterRoutes(koaRouter)
 
   app.use(koaRouter.routes())
-  app.use(
-    koaSwagger({
-      routePrefix: '/docs',
-      specPrefix: '/docs/spec',
-      exposeSpec: true,
-      swaggerOptions: {
-        spec: swagger
-      }
-    })
-  )
+
   return {
     server: app.listen(port, () => {
       console.log('Orders service listening')

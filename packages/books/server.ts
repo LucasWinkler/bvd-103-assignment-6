@@ -4,9 +4,7 @@ import qs from 'koa-qs'
 import zodRouter from 'koa-zod-router'
 import { setupBookRoutes } from './src'
 import { RegisterRoutes } from './build/routes'
-import swagger from './build/swagger.json'
 import KoaRouter from '@koa/router'
-import { koaSwagger } from 'koa2-swagger-ui'
 import bodyParser from 'koa-bodyparser'
 import { type Server, type IncomingMessage, type ServerResponse } from 'http'
 import { type AppBookDatabaseState, getBookDatabase } from './src/data/database_access'
@@ -43,15 +41,7 @@ export default async function (port?: number, randomizeDbs?: boolean): Promise<{
   RegisterRoutes(koaRouter)
 
   app.use(koaRouter.routes())
-  app.use(koaSwagger({
-    routePrefix: '/docs',
-    specPrefix: '/docs/spec',
-    exposeSpec: true,
-    swaggerOptions: {
-      spec: swagger
-    }
 
-  }))
   return {
     server: app.listen(port, () => {
       console.log('Books service listening')
