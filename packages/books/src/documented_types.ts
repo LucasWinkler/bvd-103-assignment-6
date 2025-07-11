@@ -52,3 +52,9 @@ export interface Filter {
   name?: string
   author?: string
 };
+
+export interface BookEvent {
+  type: 'BookAdded' | 'BookUpdated' | 'BookDeleted'
+  timestamp: Date
+  data: Book
+}
