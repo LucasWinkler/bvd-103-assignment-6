@@ -7,7 +7,11 @@ services:
       - ../..:/workspaces:cached
     command: sleep infinity
 
-  mongo:
+  mongo-books:
+    image: mongo:latest
+  mongo-orders:
+    image: mongo:latest
+  mongo-warehouse:
     image: mongo:latest
 
   rabbitmq:
