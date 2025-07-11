@@ -15,7 +15,10 @@
     "build": "npm run gen && npm run generate:swagger",
     "start-server": "npm run --workspaces start-server",
     "lint": "npm run --workspaces lint",
-    "test": "npm run --workspaces test"
+    "fix-lint": "npm run --workspaces fix-lint",
+    "check-types": "npm run --workspaces check-types",
+    "test": "npm run --workspaces test",
+    "test:ci": "npm run --workspaces test:ci"
   },
   "keywords": [],
   "author": "",
