@@ -56,3 +56,17 @@ export async function publishBookDeleted (book: Book): Promise<void> {
   channel.publish(CHANNEL_NAME, 'book.deleted', Buffer.from(JSON.stringify(event)))
   console.log('Published BookDeleted event')
 }
+
+export async function closeBroker (): Promise<void> {
+  if (channel !== null) {
+    await channel.close()
+    channel = null
+  }
+
+  if (connection !== null) {
+    await connection.close()
+    connection = null
+  }
+
+  console.log('Books service disconnected from RabbitMQ messaging broker')
+}
