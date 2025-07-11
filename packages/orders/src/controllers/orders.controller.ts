@@ -13,7 +13,7 @@ export class OrderRoutes extends Controller {
      * @param order The Order ID
      * @param booksFulfilled An array lsting how many copies of each book were taken from each shelf
      */
-  @Put('{order}')
+  @Put('{order}/fulfil')
   @SuccessResponse(201, 'Fulfilled')
   public async fulfilOrder (
     @Path() order: OrderId,
