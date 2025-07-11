@@ -1,9 +1,9 @@
 import type * as koa from 'koa'
 import { Controller, Route, Request, Body, Post } from 'tsoa'
 import { type BookID, type Book, type Filter } from '../documented_types'
-import { type AppBookDatabaseState } from '../database_access'
-import listBooks from './list'
-import createOrUpdateBook from './create_or_update'
+import { type AppBookDatabaseState } from '../data/database_access'
+import listBooks from '../services/list'
+import createOrUpdateBook from '../services/create_or_update'
 
 @Route('books')
 export class BooksRoutes extends Controller {

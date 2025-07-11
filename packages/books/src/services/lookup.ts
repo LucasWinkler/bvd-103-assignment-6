@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { getBookDatabase, type BookDatabaseAccessor } from '../database_access'
+import { getBookDatabase, type BookDatabaseAccessor } from '../data/database_access'
 import { type BookID, type Book } from '../documented_types'
 import { type ZodRouter } from 'koa-zod-router'
 import { ObjectId } from 'mongodb'

@@ -2,14 +2,14 @@ import Koa from 'koa'
 import cors from '@koa/cors'
 import qs from 'koa-qs'
 import zodRouter from 'koa-zod-router'
-import { setupBookRoutes } from './src/books'
+import { setupBookRoutes } from './src'
 import { RegisterRoutes } from './build/routes'
 import swagger from './build/swagger.json'
 import KoaRouter from '@koa/router'
 import { koaSwagger } from 'koa2-swagger-ui'
 import bodyParser from 'koa-bodyparser'
 import { type Server, type IncomingMessage, type ServerResponse } from 'http'
-import { type AppBookDatabaseState, getBookDatabase } from './src/database_access'
+import { type AppBookDatabaseState, getBookDatabase } from './src/data/database_access'
 
 export default async function (port?: number, randomizeDbs?: boolean): Promise<{ server: Server<typeof IncomingMessage, typeof ServerResponse>, state: AppBookDatabaseState }> {
   const bookDb = getBookDatabase(randomizeDbs === true ? undefined : 'mcmasterful-books')

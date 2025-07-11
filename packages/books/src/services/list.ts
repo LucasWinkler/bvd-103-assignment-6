@@ -1,5 +1,5 @@
 import { type Book, type Filter } from '../documented_types'
-import { type BookDatabaseAccessor } from '../database_access'
+import { type BookDatabaseAccessor } from '../data/database_access'
 
 export default async function listBooks (books: BookDatabaseAccessor, filters: Filter[]): Promise<Book[]> {
   const { books: bookCollection } = books
