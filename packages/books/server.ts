@@ -13,7 +13,9 @@ import { closeMessagingClient, connectToMessagingClient } from './src/messaging/
 export default async function (port?: number, randomizeDbs?: boolean): Promise<{ server: Server<typeof IncomingMessage, typeof ServerResponse>, state: AppBookDatabaseState }> {
   const bookDb = getBookDatabase(randomizeDbs === true ? undefined : 'mcmasterful-books')
 
-  await connectToMessagingClient()
+  if (import.meta.vitest === undefined) {
+    await connectToMessagingClient()
+  }
 
   const state: AppBookDatabaseState = {
     books: bookDb
@@ -52,7 +54,9 @@ export default async function (port?: number, randomizeDbs?: boolean): Promise<{
   process.on('SIGINT', () => {
     void (async () => {
       console.log('Shutting down Books service...')
-      await closeMessagingClient()
+      if (import.meta.vitest === undefined) {
+        await closeMessagingClient()
+      }
       server.close(() => {
         process.exit(0)
       })
@@ -62,7 +66,9 @@ export default async function (port?: number, randomizeDbs?: boolean): Promise<{
   process.on('SIGTERM', () => {
     void (async () => {
       console.log('Shutting down Books service...')
-      await closeMessagingClient()
+      if (import.meta.vitest === undefined) {
+        await closeMessagingClient()
+      }
       server.close(() => {
         process.exit(0)
       })
