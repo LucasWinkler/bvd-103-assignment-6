@@ -35,7 +35,7 @@ jobs:
             - run: npm install
             - run: npm run test:ci
 
-    generate-client:
+    generate-clients:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -43,8 +43,30 @@ jobs:
               with:
                 node-version: '20'           
             - run: npm install
-            - run: ./generate-openapi.sh
+            - run: npm run gen
             - uses: actions/upload-artifact@v4
               with:
-                name: client-sdk
-                path: client/
+                name: warehouse-client
+                path: packages/warehouse/client/
+            - uses: actions/upload-artifact@v4
+              with:
+                name: orders-client
+                path: packages/orders/client/
+            - uses: actions/upload-artifact@v4
+              with:
+                name: books-client
+                path: packages/books/client/
+
+    generate-docs:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                node-version: '20'           
+            - run: npm install
+            - run: npm run generate:swagger
+            - uses: actions/upload-artifact@v4
+              with:
+                name: combined-swagger
+                path: packages/docs/build/swagger.json
