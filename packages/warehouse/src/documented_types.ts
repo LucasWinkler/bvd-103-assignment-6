@@ -19,7 +19,6 @@ export interface FulfilledBook {
   numberOfBooks: number
 }
 
-
 /**
  * An array listing how many copies of each book are taken from a given shelf while fulfilling an order
  */
