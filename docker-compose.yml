@@ -21,8 +21,10 @@ services:
     image: node:20
     volumes:
       - ./packages/books:/app
-    command: npm run start-server
+      - ./node_modules:/app/node_modules
+    command: npx -y tsx ./index.ts
     working_dir: /app
+    restart: unless-stopped
     depends_on:
       - mongo-books
       - rabbitmq
@@ -31,8 +33,10 @@ services:
     image: node:20
     volumes:
       - ./packages/orders:/app
-    command: npm run start-server
+      - ./node_modules:/app/node_modules
+    command: npx -y tsx ./index.ts
     working_dir: /app
+    restart: unless-stopped
     depends_on:
       - mongo-orders
       - rabbitmq
@@ -41,8 +45,10 @@ services:
     image: node:20
     volumes:
       - ./packages/warehouse:/app
-    command: npm run start-server
+      - ./node_modules:/app/node_modules
+    command: npx -y tsx ./index.ts
     working_dir: /app
+    restart: unless-stopped
     depends_on:
       - mongo-warehouse
       - rabbitmq
@@ -51,7 +57,8 @@ services:
     image: node:20
     volumes:
       - ./packages/docs:/app
-    command: npm run start-server
+      - ./node_modules:/app/node_modules
+    command: npx -y tsx ./index.ts
     working_dir: /app
 
   mongo-books:

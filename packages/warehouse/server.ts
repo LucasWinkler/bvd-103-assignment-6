@@ -12,7 +12,7 @@ import { closeMessagingClient, connectToMessagingClient } from './src/messaging/
 export default async function (port?: number, randomizeDbs?: boolean): Promise<{ server: Server<typeof IncomingMessage, typeof ServerResponse>, state: AppWarehouseDatabaseState }> {
   const warehouseDb = await getDefaultWarehouseDatabase(randomizeDbs === true ? undefined : 'mcmasterful-warehouse')
 
-  await connectToMessagingClient()
+  await connectToMessagingClient(warehouseDb)
 
   const state: AppWarehouseDatabaseState = {
     warehouse: warehouseDb

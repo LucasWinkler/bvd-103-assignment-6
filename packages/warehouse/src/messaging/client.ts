@@ -6,9 +6,10 @@ import { type OrderFulfilledEvent } from './events'
 let connection: ChannelModel | null = null
 let channel: Channel | null = null
 
-const CHANNEL_NAME = 'events'
+const EXCHANGE_NAME = 'events'
+const QUEUE_NAME = 'warehouse-queue'
 
-export async function connectToMessagingClient (): Promise<void> {
+export async function connectToMessagingClient (data: WarehouseData): Promise<void> {
   if (connection !== null && channel !== null) {
     return
   }
@@ -16,18 +17,21 @@ export async function connectToMessagingClient (): Promise<void> {
   connection = await connect('amqp://rabbitmq')
   channel = await connection.createChannel()
 
-  await channel.assertExchange(CHANNEL_NAME, 'topic', { durable: true })
-  await channel.consume(CHANNEL_NAME, (msg) => {
-    console.log(`Received event: ${msg?.fields.routingKey} - ${msg?.content.toString()}`)
+  await channel.assertExchange(EXCHANGE_NAME, 'topic', { durable: true })
+
+  await channel.assertQueue(QUEUE_NAME, { durable: true })
+  await channel.bindQueue(QUEUE_NAME, EXCHANGE_NAME, '#')
+
+  await channel.consume(QUEUE_NAME, (msg) => {
     if (msg !== null) {
       const event = JSON.parse(msg.content.toString())
+
       switch (event.type) {
         case 'OrderFulfilled':
-          console.log(`Order fulfilled: ${event}`)
-          handleFulfilOrderEvent(event.data as WarehouseData, event as OrderFulfilledEvent).catch(console.error)
+          handleFulfilOrderEvent(data, event as OrderFulfilledEvent).catch(console.error)
           break
         default:
-          console.log(`Unhandled event type: ${event.type}`)
+          console.warn(`Unhandled event type: ${event.type}`)
       }
     }
   }, { noAck: true })

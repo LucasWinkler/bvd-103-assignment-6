@@ -4,7 +4,7 @@ import { type FulfilledBook } from '../documented_types'
 export async function deductFromShelf (data: WarehouseData, fulfilledBooks: FulfilledBook): Promise<void> {
   const { book, shelf, numberOfBooks } = fulfilledBooks
 
-  const numberOfCopies = await data.getCopiesOnShelf(shelf, book)
+  const numberOfCopies = await data.getCopiesOnShelf(book, shelf)
   const remainingCopies = numberOfCopies - numberOfBooks
 
   if (remainingCopies < 0) {
