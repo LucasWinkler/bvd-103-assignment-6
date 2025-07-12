@@ -22,11 +22,9 @@ export async function fulfilOrder (data: OrdersData, orderId: OrderId, booksFulf
     }
   }
 
-  if (import.meta.vitest === undefined) {
-    await Promise.all(booksFulfilled.map(async ({ book, shelf, numberOfBooks }) => {
-      await publishOrderFulfilled({ book, shelf, numberOfBooks })
-    }))
-  }
+  await Promise.all(booksFulfilled.map(async ({ book, shelf, numberOfBooks }) => {
+    await publishOrderFulfilled({ book, shelf, numberOfBooks })
+  }))
 
   await data.removeOrder(orderId)
 }

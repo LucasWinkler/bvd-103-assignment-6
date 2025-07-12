@@ -23,9 +23,7 @@ export default async function (
     randomizeDbs === true ? undefined : 'mcmasterful-warehouse'
   )
 
-  if (import.meta.vitest === undefined) {
-    await connectToMessagingClient()
-  }
+  await connectToMessagingClient()
 
   const state: AppWarehouseDatabaseState = {
     orders: warehouseDb
@@ -65,9 +63,7 @@ export default async function (
   process.on('SIGINT', () => {
     void (async () => {
       console.log('Shutting down Orders service...')
-      if (import.meta.vitest === undefined) {
-        await closeMessagingClient()
-      }
+      await closeMessagingClient()
       server.close(() => {
         process.exit(0)
       })
@@ -77,9 +73,7 @@ export default async function (
   process.on('SIGTERM', () => {
     void (async () => {
       console.log('Shutting down Orders service...')
-      if (import.meta.vitest === undefined) {
-        await closeMessagingClient()
-      }
+      await closeMessagingClient()
       server.close(() => {
         process.exit(0)
       })

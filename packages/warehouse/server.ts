@@ -12,9 +12,7 @@ import { closeMessagingClient, connectToMessagingClient } from './src/messaging/
 export default async function (port?: number, randomizeDbs?: boolean): Promise<{ server: Server<typeof IncomingMessage, typeof ServerResponse>, state: AppWarehouseDatabaseState }> {
   const warehouseDb = await getDefaultWarehouseDatabase(randomizeDbs === true ? undefined : 'mcmasterful-warehouse')
 
-  if (import.meta.vitest === undefined) {
-    await connectToMessagingClient(warehouseDb)
-  }
+  await connectToMessagingClient(warehouseDb)
 
   const state: AppWarehouseDatabaseState = {
     warehouse: warehouseDb
@@ -51,9 +49,7 @@ export default async function (port?: number, randomizeDbs?: boolean): Promise<{
   process.on('SIGINT', () => {
     void (async () => {
       console.log('Shutting down Warehouse service...')
-      if (import.meta.vitest === undefined) {
-        await closeMessagingClient()
-      }
+      await closeMessagingClient()
       server.close(() => {
         process.exit(0)
       })
@@ -63,9 +59,7 @@ export default async function (port?: number, randomizeDbs?: boolean): Promise<{
   process.on('SIGTERM', () => {
     void (async () => {
       console.log('Shutting down Warehouse service...')
-      if (import.meta.vitest === undefined) {
-        await closeMessagingClient()
-      }
+      await closeMessagingClient()
       server.close(() => {
         process.exit(0)
       })

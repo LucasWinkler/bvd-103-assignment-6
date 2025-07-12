@@ -19,9 +19,7 @@ export default async function createOrUpdateBook (book: Book, books: BookDatabas
     }, { returnDocument: 'after' })
 
     if (result !== null) {
-      if (import.meta.vitest === undefined) {
-        await publishBookUpdated(result)
-      }
+      await publishBookUpdated(result)
       return id
     } else {
       return false
@@ -40,14 +38,10 @@ export default async function createOrUpdateBook (book: Book, books: BookDatabas
       return false
     }
 
-    const createdBook = {
+    await publishBookAdded({
       id: result.insertedId.toHexString(),
       ...newBook
-    }
-
-    if (import.meta.vitest === undefined) {
-      await publishBookAdded(createdBook)
-    }
+    })
 
     return result.insertedId.toHexString()
   }
