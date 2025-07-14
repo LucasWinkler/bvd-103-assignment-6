@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "gen": "npm run --workspaces --if-present gen",
-    "generate:swagger": "npx swagger-cli bundle packages/warehouse/build/swagger.json packages/orders/build/swagger.json packages/books/build/swagger.json --outfile packages/docs/build/swagger.json --type json",
+    "generate:swagger": "openapi-merge-cli --config ./openapi-merge-config.json",
     "build": "npm run gen && npm run generate:swagger",
     "start-server": "npm run --workspaces start-server",
     "lint": "npm run --workspaces lint",
@@ -25,7 +25,8 @@
   "license": "ISC",
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.13.1",
-    "typescript": "^5.4.3",
-    "tsx": "^4.7.0"
+    "openapi-merge-cli": "^1.3.2",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.3"
   }
 }

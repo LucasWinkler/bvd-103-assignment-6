@@ -1,0 +1,14 @@
+{
+  "inputs": [
+    {
+      "inputFile": "./packages/warehouse/build/swagger.json"
+    },
+    {
+      "inputFile": "./packages/books/build/swagger.json"
+    },
+    {
+      "inputFile": "./packages/orders/build/swagger.json"
+    }
+  ],
+  "output": "./packages/docs/build/swagger.json"
+}
