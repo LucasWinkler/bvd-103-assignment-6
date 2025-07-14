@@ -1,4 +1,4 @@
-import { type OrderId, type ShelfId, type BookID } from '../documented_types'
+import { type ShelfId, type BookID } from '../documented_types'
 import { getDefaultWarehouseDatabase } from './warehouse_database'
 
 export interface WarehouseData {
@@ -9,12 +9,10 @@ export interface WarehouseData {
 
 export class InMemoryWarehouse implements WarehouseData {
   books: Record<BookID, Record<ShelfId, number>>
-  orders: Record<OrderId, Record<BookID, number>>
 
-  constructor (params?: { books?: Record<BookID, Record<ShelfId, number>>, orders?: Record<OrderId, Record<ShelfId, number>> }) {
-    const { books, orders } = params ?? {}
+  constructor (params?: { books?: Record<BookID, Record<ShelfId, number>> }) {
+    const { books } = params ?? {}
     this.books = books ?? {}
-    this.orders = orders ?? {}
   }
 
   async placeBookOnShelf (bookId: string, shelf: string, count: number): Promise<void> {
