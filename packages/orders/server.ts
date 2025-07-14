@@ -19,14 +19,14 @@ export default async function (
     server: Server<typeof IncomingMessage, typeof ServerResponse>
     state: AppWarehouseDatabaseState
   }> {
-  const warehouseDb = await getDefaultOrdersDatabase(
+  const ordersDb = await getDefaultOrdersDatabase(
     randomizeDbs === true ? undefined : 'mcmasterful-warehouse'
   )
 
-  await connectToMessagingClient()
+  await connectToMessagingClient(ordersDb)
 
   const state: AppWarehouseDatabaseState = {
-    orders: warehouseDb
+    orders: ordersDb
   }
 
   const app = new Koa<

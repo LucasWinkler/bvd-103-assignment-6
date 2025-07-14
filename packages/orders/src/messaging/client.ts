@@ -1,13 +1,14 @@
 import { type Channel, type ChannelModel, connect } from 'amqplib'
 import { type FulfilledBook } from '../documented_types'
 import { type OrderFulfilledEvent } from './events'
+import { type OrdersData } from '../data/orders_data'
 
 let connection: ChannelModel | null = null
 let channel: Channel | null = null
 
 const CHANNEL_NAME = 'events'
 
-export async function connectToMessagingClient (): Promise<void> {
+export async function connectToMessagingClient (data: OrdersData): Promise<void> {
   if (connection !== null && channel !== null) {
     return
   }
