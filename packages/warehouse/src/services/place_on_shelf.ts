@@ -1,12 +1,17 @@
 import { type ShelfId, type BookID } from '../documented_types'
 import { InMemoryWarehouse, type WarehouseData } from '../data/warehouse_data'
+import { publishBookStocked } from '../messaging/client'
 
 export async function placeBooksOnShelf (data: WarehouseData, bookId: BookID, numberOfBooks: number, shelf: ShelfId): Promise<void> {
   if (numberOfBooks < 0) {
     throw new Error("Can't place less than 0 books on a shelf")
   }
+
   const current = await data.getCopiesOnShelf(bookId, shelf) ?? 0
-  await data.placeBookOnShelf(bookId, shelf, current + numberOfBooks)
+  const newStock = current + numberOfBooks
+
+  await publishBookStocked({ bookId, stock: newStock })
+  await data.placeBookOnShelf(bookId, shelf, newStock)
 }
 
 if (import.meta.vitest !== undefined) {

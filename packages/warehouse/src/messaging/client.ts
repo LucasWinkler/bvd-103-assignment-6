@@ -1,7 +1,8 @@
 import { type Channel, type ChannelModel, connect } from 'amqplib'
 import { handleFulfilOrderEvent } from './fulfil_order'
 import { type WarehouseData } from '../data/warehouse_data'
-import { type OrderFulfilledEvent } from './events'
+import { type BookStockedEvent, type OrderFulfilledEvent } from './events'
+import { type BookID } from '../documented_types'
 
 let connection: ChannelModel | null = null
 let channel: Channel | null = null
@@ -37,6 +38,19 @@ export async function connectToMessagingClient (data: WarehouseData): Promise<vo
   }, { noAck: true })
 
   console.log('Warehouse service connected to RabbitMQ messaging broker')
+}
+
+export async function publishBookStocked ({ bookId, stock }: { bookId: BookID, stock: number }): Promise<void> {
+  if (channel === null) throw new Error('Not connected to warehouse broker')
+
+  const event: BookStockedEvent = {
+    type: 'BookStocked',
+    timestamp: new Date(),
+    data: { bookId, stock }
+  }
+
+  channel.publish(EXCHANGE_NAME, 'warehouse.book_stocked', Buffer.from(JSON.stringify(event)))
+  console.log('Published BookStocked event')
 }
 
 export async function closeMessagingClient (): Promise<void> {
