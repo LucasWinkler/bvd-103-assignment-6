@@ -53,6 +53,33 @@ export class DatabaseWarehouse implements WarehouseData {
 
     return copies
   }
+
+  async getShelvesWithBook (book: string): Promise<ShelfId[]> {
+    const result = this.accessor.books.find({ book })
+    const shelves: ShelfId[] = []
+
+    while (await result.hasNext()) {
+      const value = await result.next()
+      if (value === null) {
+        break
+      }
+      shelves.push(value.shelf)
+    }
+
+    return shelves
+  }
+
+  async removeBookFromShelf (shelf: ShelfId, book: BookID, count: number): Promise<void> {
+    const result = await this.accessor.books.findOneAndUpdate(
+      { book, shelf },
+      { $inc: { count: -count } },
+      { returnDocument: 'after' }
+    )
+
+    if (result !== null && result.count <= 0) {
+      await this.accessor.books.deleteOne({ book, shelf })
+    }
+  }
 }
 
 if (import.meta.vitest !== undefined) {
